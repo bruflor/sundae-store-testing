@@ -5,3 +5,6 @@
 - query: expect elemento **not** to be in DOM
 - find: expect element to appear async
 
+## Tech
+
+To mock http response the course uses **msw**.
