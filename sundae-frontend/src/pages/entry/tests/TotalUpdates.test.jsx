@@ -51,3 +51,10 @@ test("update toppings subtotal when toppings change", async () => {
   await user.click(hotFudgeCheckbox);
   expect(toppingsTotal).toHaveTextContent("1.00");
 });
+
+describe("Grand total", ()=>{
+    test("grand total starts at zero", ()=>{})
+    test("grand total updates properly if scoops is added first", () => {})
+    test("grand total updates properly if toopings is added first", () => {})
+    test("grand total updates properly if item is removed", () => {})
+})

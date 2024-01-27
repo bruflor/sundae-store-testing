@@ -13,3 +13,4 @@ To mock http response the course uses **msw**.
 
 - logRoles from testing-library/react to match and investigate the components that are being used. Alerts for example doesnt have the roles and accessible name at the same time to be matched together. 
 - All userEvents need to be async, so add the await in front and make the test async
+- use {exact:false} in the end of a byText to not have the exact text in the return.
