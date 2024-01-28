@@ -1,6 +1,7 @@
-import { render, screen } from "../../../test-utils/testing-library-utils";
+import { findByRole, render, screen } from "../../../test-utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 import Options from "../Options";
+import OrderEntry from "../OrderEntry"
 
 test("update scoop subtotal when scoops change", async () => {
   const user = userEvent.setup();
@@ -53,8 +54,51 @@ test("update toppings subtotal when toppings change", async () => {
 });
 
 describe("Grand total", ()=>{
-    test("grand total starts at zero", ()=>{})
-    test("grand total updates properly if scoops is added first", () => {})
-    test("grand total updates properly if toopings is added first", () => {})
-    test("grand total updates properly if item is removed", () => {})
+    test("grand total starts at zero", ()=>{
+      render(<OrderEntry />)
+
+      const grandTotal = screen.getByRole("heading", {name:/Grand Total: \$/i})
+      expect(grandTotal).toHaveTextContent("0.00")
+      
+    })
+
+    test("grand total updates properly if scoops is added first", async() => {
+      const user = userEvent.setup();
+      render(<OrderEntry />)
+
+      const grandTotal = screen.getByRole("heading", {name:/Grand Total: \$/i})
+      expect(grandTotal).toHaveTextContent("0.00")
+
+      const scoopVanilla = await screen.findByRole("spinbutton", {name:/Vanilla/i})
+      await user.clear(scoopVanilla)
+      await user.type(scoopVanilla, "2")
+      expect(grandTotal).toHaveTextContent("4.00")
+    })
+
+    test("grand total updates properly if toopings is added first", async() => {
+      const user = userEvent.setup();
+      render(<OrderEntry />)
+
+      const grandTotal = screen.getByRole("heading", {name:/Grand Total: \$/i})
+      expect(grandTotal).toHaveTextContent("0.00")
+
+      const toppings = await screen.findByRole("checkbox", {name:/Cherries/i})
+      await user.click(toppings)
+      expect(grandTotal).toHaveTextContent("1.00")
+    })
+    test("grand total updates properly if item is removed", async() => {
+      const user = userEvent.setup()
+      render(<OrderEntry />)
+
+      const grandTotal = screen.getByRole("heading", {name:/Grand Total: \$/i})
+      expect(grandTotal).toHaveTextContent("0.00")
+      
+      const chocolateScoop = await screen.findByRole("spinbutton", {name:/Chocolate/i})
+      await user.clear(chocolateScoop)
+      await user.type(chocolateScoop, "1")
+      expect(grandTotal).toHaveTextContent("2.00")
+
+      await user.type(chocolateScoop, "0")
+      expect(grandTotal).toHaveTextContent("0.00")
+    })
 })
